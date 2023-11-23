@@ -12,11 +12,11 @@ import pygame, sys, time, random
 # Hard      ->  40
 # Harder    ->  60
 # Impossible->  120
-difficulty = 25
+difficulty = 30
 
 # Window size
-frame_size_x = 720
-frame_size_y = 480
+frame_size_x = 1420
+frame_size_y = 800
 
 # Checks for errors encountered
 check_errors = pygame.init()
@@ -35,10 +35,11 @@ game_window = pygame.display.set_mode((frame_size_x, frame_size_y))
 
 
 # Colors (R, G, B)
-black = pygame.Color(0, 0, 0)
-white = pygame.Color(255, 255, 255)
-red = pygame.Color(255, 0, 0)
-green = pygame.Color(0, 255, 0)
+black = pygame.Color(0, 0, 200)
+food_color_1 = pygame.Color(255, 100, 255)
+food_color_2 = pygame.Color(100, 100, 200)
+red = pygame.Color(255, 170, 170)
+green = pygame.Color(250, 55, 100)
 blue = pygame.Color(0, 0, 255)
 
 
@@ -50,8 +51,10 @@ fps_controller = pygame.time.Clock()
 snake_pos = [100, 50]
 snake_body = [[100, 50], [100-10, 50], [100-(2*10), 50]]
 
-food_pos = [random.randrange(1, (frame_size_x//10)) * 10, random.randrange(1, (frame_size_y//10)) * 10]
-food_spawn = True
+food_pos1 = [random.randrange(20, (frame_size_x // 10)) * 10, random.randrange(20, (frame_size_y // 10)) * 10]
+food_spawn1 = True
+food_pos2 = [random.randrange(20, (frame_size_x // 10)) * 10, random.randrange(20, (frame_size_y // 10)) * 10]
+food_spawn2 = True
 
 direction = 'RIGHT'
 change_to = direction
@@ -130,16 +133,25 @@ while True:
 
     # Snake body growing mechanism
     snake_body.insert(0, list(snake_pos))
-    if snake_pos[0] == food_pos[0] and snake_pos[1] == food_pos[1]:
+
+    if snake_pos[0] == food_pos1[0] and snake_pos[1] == food_pos1[1]:
         score += 1
-        food_spawn = False
+        food_spawn1 = False
+    elif snake_pos[0] == food_pos2[0] and snake_pos[1] == food_pos2[1]:
+        score += 1
+        food_spawn2 = False
     else:
         snake_body.pop()
 
+
     # Spawning food on the screen
-    if not food_spawn:
-        food_pos = [random.randrange(1, (frame_size_x//10)) * 10, random.randrange(1, (frame_size_y//10)) * 10]
-    food_spawn = True
+    if not food_spawn1:
+        food_pos1 = [random.randrange(1, (frame_size_x // 10)) * 10, random.randrange(1, (frame_size_y // 10)) * 10]
+    food_spawn1 = True
+
+    if not food_spawn2:
+        food_pos2 = [random.randrange(1, (frame_size_x // 10)) * 10, random.randrange(1, (frame_size_y // 10)) * 10]
+    food_spawn2 = True
 
     # GFX
     game_window.fill(black)
@@ -150,7 +162,8 @@ while True:
         pygame.draw.rect(game_window, green, pygame.Rect(pos[0], pos[1], 10, 10))
 
     # Snake food
-    pygame.draw.rect(game_window, white, pygame.Rect(food_pos[0], food_pos[1], 10, 10))
+    pygame.draw.rect(game_window, food_color_1, pygame.Rect(food_pos1[0], food_pos1[1], 10, 10))
+    pygame.draw.rect(game_window, food_color_2, pygame.Rect(food_pos2[0], food_pos2[1], 10, 10))
 
     # Game Over conditions
     # Getting out of bounds
@@ -163,7 +176,7 @@ while True:
         if snake_pos[0] == block[0] and snake_pos[1] == block[1]:
             game_over()
 
-    show_score(1, white, 'consolas', 20)
+    show_score(1, food_color_1, 'consolas', 20)
     # Refresh game screen
     pygame.display.update()
     # Refresh rate
