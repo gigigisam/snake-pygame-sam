@@ -12,11 +12,11 @@ import pygame, sys, time, random
 # Hard      ->  40
 # Harder    ->  60
 # Impossible->  120
-difficulty = 30
+difficulty = 25
 
 # Window size
-frame_size_x = 1420
-frame_size_y = 800
+frame_size_x = 1080
+frame_size_y = 720
 
 # Checks for errors encountered
 check_errors = pygame.init()
